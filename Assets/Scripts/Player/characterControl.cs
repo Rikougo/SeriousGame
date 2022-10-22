@@ -23,6 +23,8 @@ namespace Player
 
             m_input.actions["Test"].started += m_jump.OnJump;
             m_input.actions["Test"].canceled += m_jump.OnJump;
+            
+            m_input.actions["Dash"].started += m_movement.OnDash;
         }
         
         private void OnDisable() {
@@ -31,6 +33,8 @@ namespace Player
 
             m_input.actions["Test"].started -= m_jump.OnJump;
             m_input.actions["Test"].canceled -= m_jump.OnJump;
+            
+            m_input.actions["Dash"].started -= m_movement.OnDash;
         }
     }
 }

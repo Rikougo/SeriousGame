@@ -9,7 +9,7 @@ public class characterMovement : MonoBehaviour
 
     [Header("Components")]
     private Rigidbody2D body;
-    characterGround ground;
+    private characterGround ground;
 
     [Header("Movement Stats")]
     [SerializeField, Range(0f, 20f)][Tooltip("Maximum movement speed")] public float maxSpeed = 10f;
@@ -20,45 +20,59 @@ public class characterMovement : MonoBehaviour
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop in mid-air when no direction is used")] public float maxAirDeceleration;
     [SerializeField, Range(0f, 100f)][Tooltip("How fast to stop when changing direction when in mid-air")] public float maxAirTurnSpeed = 80f;
     [SerializeField][Tooltip("Friction to apply against movement on stick")] private float friction;
+    public bool useAcceleration;
 
-    [Header("Options")]
-    [Tooltip("When false, the charcter will skip acceleration and deceleration and instantly move and stop")] public bool useAcceleration;
-    public bool itsTheIntro = true;
+    [Header("Dash Stats")] 
+    [SerializeField] private float dashDuration;
+    [SerializeField] private float dashDistance;
 
-    [Header("Calculations")]
-    public float directionX;
+    [Header("Calculations")] 
+    public Vector2 direction;
     private Vector2 desiredVelocity;
     public Vector2 velocity;
     private float maxSpeedChange;
     private float acceleration;
     private float deceleration;
     private float turnSpeed;
+    
+    private bool onGround;
+    private bool pressingKey;
 
-    [Header("Current State")]
-    public bool onGround;
-    public bool pressingKey;
+    private Vector2 onDashDirection;
+    private float dashTimer;
+    public bool isDashing { get; private set; }
 
     private void Awake()
     {
         //Find the character's Rigidbody and ground detection script
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<characterGround>();
+
+        isDashing = false;
+    }
+
+    public void OnDash(InputAction.CallbackContext context)
+    {
+        onDashDirection = direction == Vector2.zero ? Vector2.right : direction.normalized;
+
+        isDashing = true;
+        dashTimer = dashDuration;
     }
 
     public void OnMovement(InputAction.CallbackContext context)
     {
         //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
         //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
-        directionX = context.ReadValue<Vector2>().x;
+        direction = context.ReadValue<Vector2>();
     }
 
     private void Update()
     {
         //Used to flip the character's sprite when she changes direction
         //Also tells us that we are currently pressing a direction button
-        if (directionX != 0)
+        if (direction.x != 0)
         {
-            transform.localScale = new Vector3(directionX > 0 ? 1 : -1, 1, 1);
+            transform.localScale = new Vector3(direction.x > 0 ? 1 : -1, 1, 1);
             pressingKey = true;
         }
         else
@@ -68,8 +82,17 @@ public class characterMovement : MonoBehaviour
 
         //Calculate's the character's desired velocity - which is the direction you are facing, multiplied by the character's maximum speed
         //Friction is not used in this game
-        desiredVelocity = new Vector2(directionX, 0f) * Mathf.Max(maxSpeed - friction, 0f);
+        if (isDashing)
+        {
+            dashTimer -= Time.deltaTime;
+            desiredVelocity = onDashDirection * (dashDistance / dashDuration);
 
+            if (dashTimer < 0) isDashing = false;
+        }
+        else
+        {
+            desiredVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - friction, 0f);
+        }
     }
 
     private void FixedUpdate()
@@ -81,6 +104,12 @@ public class characterMovement : MonoBehaviour
 
         //Get the Rigidbody's current velocity
         velocity = body.velocity;
+
+        if (isDashing)
+        {
+            body.velocity = desiredVelocity;
+            return;
+        }
 
         //Calculate movement, depending on whether "Instant Movement" has been checked
         if (useAcceleration)
@@ -111,7 +140,7 @@ public class characterMovement : MonoBehaviour
         if (pressingKey)
         {
             //If the sign (i.e. positive or negative) of our input direction doesn't match our movement, it means we're turning around and so should use the turn speed stat.
-            if (Mathf.Sign(directionX) != Mathf.Sign(velocity.x))
+            if (Mathf.Sign(direction.x) != Mathf.Sign(velocity.x))
             {
                 maxSpeedChange = turnSpeed * Time.deltaTime;
             }
@@ -142,7 +171,4 @@ public class characterMovement : MonoBehaviour
 
         body.velocity = velocity;
     }
-
-
-
 }

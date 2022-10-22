@@ -37,7 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8830315171069571869
 SpriteRenderer:
@@ -171,15 +171,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   body: {fileID: 0}
   velocity: {x: 0, y: 0}
-  jumpHeight: 3
-  timeToJumpApex: 0.2
+  jumpHeight: 3.5
+  timeToJumpApex: 0.45
   platformToolkitValue: 1.5
   upwardMovementMultiplier: 1
-  downwardMovementMultiplier: 5.2
+  downwardMovementMultiplier: 1.5
   maxAirJumps: 0
-  variablejumpHeight: 0
-  jumpCutOff: 5.2
-  speedLimit: 0
+  variablejumpHeight: 1
+  jumpCutOff: 1.5
+  speedLimit: 20
   coyoteTime: 0.15
   jumpBuffer: 0.15
   jumpSpeed: 0
@@ -198,13 +198,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7b6f20a1b8fda34e9e46452d4d157cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 9
-  maxAcceleration: 79
-  maxDecceleration: 76
-  maxTurnSpeed: 76
-  maxAirAcceleration: 79
-  maxAirDeceleration: 76
-  maxAirTurnSpeed: 80
+  maxSpeed: 10
+  maxAcceleration: 52
+  maxDecceleration: 52
+  maxTurnSpeed: 90
+  maxAirAcceleration: 100
+  maxAirDeceleration: 100
+  maxAirTurnSpeed: 100
   friction: 0
   useAcceleration: 0
   itsTheIntro: 1
