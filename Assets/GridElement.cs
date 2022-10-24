@@ -17,9 +17,30 @@ public class GridElement : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            Vector3 newCamPos = transform.position;
-            newCamPos.z = (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
-            (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = newCamPos;
+            // Vector3 newCamPos = transform.position;
+            // newCamPos.z = (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
+            // (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = newCamPos;
+            StartCoroutine ( MoveScreen() );
+            StartCoroutine ( MoveScreen() );
         }
     }
+
+
+    IEnumerator MoveScreen() {
+
+        Vector3 nextPos = transform.position;
+        nextPos.z =  (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
+
+        float smoothTime = 0.7F;
+        Vector3 velocity = Vector3.zero;
+
+        while((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position  != nextPos) {
+            nextPos = transform.position;
+            nextPos.z =  (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
+            (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = Vector3.SmoothDamp((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position, nextPos, ref velocity, smoothTime);
+            
+            yield return null;
+        }
+    }
+    
 }
