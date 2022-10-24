@@ -9,6 +9,7 @@ public class characterJump : MonoBehaviour
     public Rigidbody2D body;
 
     private characterGround ground;
+    private characterMovement movement;
 
     [HideInInspector] public Vector2 velocity;
     // [SerializeField] movementLimiter moveLimit;
@@ -69,6 +70,7 @@ public class characterJump : MonoBehaviour
 
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<characterGround>();
+        movement = GetComponent<characterMovement>();
         defaultGravityScale = 1f;
 
         timeToJumpApex = scale(1, 10, 0.2f, 2.5f, platformToolkitValue);
@@ -93,7 +95,7 @@ public class characterJump : MonoBehaviour
 
     void Update()
     {
-        setPhysics();
+        if (!movement.isDashing) setPhysics();
 
         //Check if we're on ground, using Kit's Ground script
         onGround = ground.GetOnGround();
@@ -142,7 +144,7 @@ public class characterJump : MonoBehaviour
         velocity = body.velocity;
 
         //Keep trying to do a jump, for as long as desiredJump is true
-        if (desiredJump)
+        if (desiredJump && !movement.isDashing)
         {
             DoAJump();
             body.velocity = velocity;
@@ -152,7 +154,7 @@ public class characterJump : MonoBehaviour
             return;
         }
 
-        calculateGravity();
+        if (!movement.isDashing) calculateGravity();
     }
 
     private void calculateGravity()

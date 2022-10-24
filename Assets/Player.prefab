@@ -37,7 +37,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &8830315171069571869
 SpriteRenderer:
@@ -207,11 +207,10 @@ MonoBehaviour:
   maxAirTurnSpeed: 100
   friction: 0
   useAcceleration: 0
-  itsTheIntro: 1
-  directionX: 0
+  dashDuration: 0.15
+  dashDistance: 5
+  direction: {x: 0, y: 0}
   velocity: {x: 0, y: 0}
-  onGround: 1
-  pressingKey: 0
 --- !u!114 &8219391757019086689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,7 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: 0b36ccf3c8da7f045922433000e05d0c, type: 3}
-  m_NotificationBehavior: 0
+  m_NotificationBehavior: 2
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -236,7 +235,19 @@ MonoBehaviour:
   m_ControlsChangedEvent:
     m_PersistentCalls:
       m_Calls: []
-  m_ActionEvents: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bbb7104c-caff-40ea-a0f8-78a485be88b7
+    m_ActionName: Player/Move[/Keyboard/w,/Keyboard/s,/Keyboard/a,/Keyboard/d]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 722b9d4f-752b-46ec-9272-da23fc686c36
+    m_ActionName: Player/Test[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a6f24fdc-37d0-426b-83b0-d7e21097840d
+    m_ActionName: Player/Dash[/Keyboard/shift]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

@@ -54,6 +54,7 @@ public class characterMovement : MonoBehaviour
     public void OnDash(InputAction.CallbackContext context)
     {
         onDashDirection = direction == Vector2.zero ? Vector2.right : direction.normalized;
+        Debug.Log(onDashDirection);
 
         isDashing = true;
         dashTimer = dashDuration;
@@ -87,7 +88,12 @@ public class characterMovement : MonoBehaviour
             dashTimer -= Time.deltaTime;
             desiredVelocity = onDashDirection * (dashDistance / dashDuration);
 
-            if (dashTimer < 0) isDashing = false;
+            if (dashTimer < 0)
+            {
+                isDashing = false;
+                desiredVelocity = Vector2.zero;
+                body.velocity = desiredVelocity;
+            }
         }
         else
         {
