@@ -64,6 +64,9 @@ public class characterJump : MonoBehaviour
     public bool onGround;
     private bool currentlyJumping;
 
+    public bool againstWall;
+    public bool currentlyWallJumping = false;  
+
     void Awake()
     {
         //Find the character's Rigidbody and ground detection and juice scripts
@@ -99,6 +102,7 @@ public class characterJump : MonoBehaviour
 
         //Check if we're on ground, using Kit's Ground script
         onGround = ground.GetOnGround();
+        againstWall = ground.GetAgainstWall();
 
         //Jump buffer allows us to queue up a jump, which will play when we next hit the ground
         if (jumpBuffer > 0)
@@ -249,6 +253,42 @@ public class characterJump : MonoBehaviour
             }
 
             //Apply the new jumpSpeed to the velocity. It will be sent to the Rigidbody in FixedUpdate;
+            velocity.y += jumpSpeed;
+            currentlyJumping = true;
+        }
+
+        if ((againstWall && (movement.direction.x != 0)) || (coyoteTimeCounter > 0.03f && coyoteTimeCounter < coyoteTime) || canJumpAgain)
+        {
+            desiredJump = false;
+            jumpBufferCounter = 0;
+            coyoteTimeCounter = 0;
+
+            //If we have double jump on, allow us to jump again (but only once)
+            canJumpAgain = (maxAirJumps == 1 && canJumpAgain == false);
+
+            //Determine the power of the jump, based on our gravity and stats
+            jumpSpeed = Mathf.Sqrt(-2f * Physics2D.gravity.y * body.gravityScale * jumpHeight);
+
+            //If Kit is moving up or down when she jumps (such as when doing a double jump), change the jumpSpeed;
+            //This will ensure the jump is the exact same strength, no matter your velocity.
+            if (velocity.y > 0f)
+            {
+                currentlyWallJumping = true;
+                jumpSpeed = Mathf.Max(jumpSpeed - velocity.y, 0f);
+            }
+            else if (velocity.y < 0f)
+            {
+                currentlyWallJumping = false;
+                jumpSpeed += Mathf.Abs(body.velocity.y);
+            }
+
+            //Apply the new jumpSpeed to the velocity. It will be sent to the Rigidbody in FixedUpdate;
+            if(movement.direction.x == 1){
+                velocity.x -= jumpSpeed;
+            }
+            else{
+                velocity.x += jumpSpeed;
+            }
             velocity.y += jumpSpeed;
             currentlyJumping = true;
         }

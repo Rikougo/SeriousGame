@@ -10,6 +10,8 @@ public class characterMovement : MonoBehaviour
     [Header("Components")]
     private Rigidbody2D body;
     private characterGround ground;
+    
+    private characterJump jump;
 
     [Header("Movement Stats")]
     [SerializeField, Range(0f, 20f)][Tooltip("Maximum movement speed")] public float maxSpeed = 10f;
@@ -36,17 +38,20 @@ public class characterMovement : MonoBehaviour
     private float turnSpeed;
     
     private bool onGround;
+    private bool againstWall;
     private bool pressingKey;
 
     private Vector2 onDashDirection;
     private float dashTimer;
     public bool isDashing { get; private set; }
+    public bool hasDashed;
 
     private void Awake()
     {
         //Find the character's Rigidbody and ground detection script
         body = GetComponent<Rigidbody2D>();
         ground = GetComponent<characterGround>();
+        jump = GetComponent<characterJump>();
 
         isDashing = false;
     }
@@ -65,13 +70,14 @@ public class characterMovement : MonoBehaviour
         //This is called when you input a direction on a valid input type, such as arrow keys or analogue stick
         //The value will read -1 when pressing left, 0 when idle, and 1 when pressing right.
         direction = context.ReadValue<Vector2>();
+        //Debug.Log(direction);
     }
 
     private void Update()
     {
         //Used to flip the character's sprite when she changes direction
         //Also tells us that we are currently pressing a direction button
-        if (direction.x != 0)
+        if (direction.x != 0 && !jump.currentlyWallJumping)
         {
             transform.localScale = new Vector3(direction.x > 0 ? 1 : -1, 1, 1);
             pressingKey = true;
@@ -85,15 +91,16 @@ public class characterMovement : MonoBehaviour
         //Friction is not used in this game
         if (isDashing)
         {
-            dashTimer -= Time.deltaTime;
-            desiredVelocity = onDashDirection * (dashDistance / dashDuration);
-
-            if (dashTimer < 0)
+            if (dashTimer < 0 || hasDashed)
             {
                 isDashing = false;
+                hasDashed = true;
                 desiredVelocity = Vector2.zero;
                 body.velocity = desiredVelocity;
             }
+
+            dashTimer -= Time.deltaTime;
+            desiredVelocity = onDashDirection * (dashDistance / dashDuration);
         }
         else
         {
@@ -107,6 +114,11 @@ public class characterMovement : MonoBehaviour
 
         //Get Kit's current ground status from her ground script
         onGround = ground.GetOnGround();
+        againstWall = ground.GetAgainstWall();
+
+        if(onGround || againstWall){
+            hasDashed = false;
+        }
 
         //Get the Rigidbody's current velocity
         velocity = body.velocity;

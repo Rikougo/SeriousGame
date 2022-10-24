@@ -5,6 +5,7 @@ using UnityEngine;
 public class characterGround : MonoBehaviour
 {
         private bool onGround;
+        private bool againstWall;
        
         [Header("Collider Settings")]
         [SerializeField][Tooltip("Length of the ground-checking collider")] private float groundLength = 0.95f;
@@ -18,6 +19,11 @@ public class characterGround : MonoBehaviour
         {
             //Determine if the player is stood on objects on the ground layer, using a pair of raycasts
             onGround = Physics2D.Raycast(transform.position + colliderOffset, Vector2.down, groundLength, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.down, groundLength, groundLayer);
+            againstWall = Physics2D.Raycast(transform.position + colliderOffset, Vector2.left, groundLength, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.left, groundLength, groundLayer);
+            if(!againstWall){
+                againstWall = Physics2D.Raycast(transform.position + colliderOffset, Vector2.right, groundLength, groundLayer) || Physics2D.Raycast(transform.position - colliderOffset, Vector2.right, groundLength, groundLayer);    
+            }
+            //Debug.Log(againstWall);
         }
 
         private void OnDrawGizmos()
@@ -30,4 +36,6 @@ public class characterGround : MonoBehaviour
 
         //Send ground detection to other scripts
         public bool GetOnGround() { return onGround; }
+
+        public bool GetAgainstWall() { return againstWall; }
 }
