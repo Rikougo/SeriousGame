@@ -20,7 +20,7 @@ public class LevelLight : MonoBehaviour
     void Start()
     {
         light = GetComponent<Light2D>();
-        light.enabled = false;
+        light.intensity = 0.0f;
         _instance = this;
     }
 
@@ -65,7 +65,7 @@ public class LevelLight : MonoBehaviour
                 }
                 else
                 {
-                    light.enabled = false;
+                    light.intensity = 0.0f;
                     timer = -1;
                 }
             }
