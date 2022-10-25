@@ -122,7 +122,7 @@ public class characterMovement : MonoBehaviour
             desiredVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - friction, 0f);
         }
 
-        if (desiredVelocity.x == 0)
+        if (body.velocity.magnitude <= 0.0f)
         {
             if (!lightOn && standTimer <= 0.0f)
             {
