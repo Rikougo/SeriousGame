@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.Rendering.Universal;
 
 //This script handles moving the character on the X axis, both on the ground and in the air.
 
@@ -10,6 +11,7 @@ public class characterMovement : MonoBehaviour
     [Header("Components")]
     private Rigidbody2D body;
     private characterGround ground;
+    [SerializeField] private Light2D aura;
     
     private characterJump jump;
 
@@ -46,6 +48,18 @@ public class characterMovement : MonoBehaviour
     public bool isDashing { get; private set; }
     public bool hasDashed;
 
+    [Header("Stand Stats")] 
+    [SerializeField] private float standDuration = 0.5f;
+    [SerializeField] private float lightOnDuration = 0.7f;
+    [SerializeField] private float lightOffDuration = 0.7f;
+    [SerializeField] private AnimationCurve lightCurve;
+    [SerializeField] private float lightRadiusGain = 15.0f;
+    [SerializeField] private float lightFalloffLoss = 0.25f;
+    
+    private float standTimer;
+    private float lightTimer;
+    private bool lightOn;
+
     private void Awake()
     {
         //Find the character's Rigidbody and ground detection script
@@ -54,6 +68,7 @@ public class characterMovement : MonoBehaviour
         jump = GetComponent<characterJump>();
 
         isDashing = false;
+        lightOn = false;
     }
 
     public void OnDash(InputAction.CallbackContext context)
@@ -105,6 +120,50 @@ public class characterMovement : MonoBehaviour
         else
         {
             desiredVelocity = new Vector2(direction.x, 0f) * Mathf.Max(maxSpeed - friction, 0f);
+        }
+
+        if (desiredVelocity.x == 0)
+        {
+            if (!lightOn && standTimer <= 0.0f)
+            {
+                standTimer = standDuration;
+            } else if (standTimer > 0.0f)
+            {
+                standTimer -= Time.deltaTime;
+
+                if (standTimer < 0.0f)
+                {
+                    lightOn = true;
+                    lightTimer = lightOnDuration;
+                    aura.falloffIntensity = 0.25f;
+                }
+            }
+
+            if (lightOn)
+            {
+                if (lightTimer > 0.0f) lightTimer = Mathf.Max(0.0f, lightTimer - Time.deltaTime);
+
+                aura.falloffIntensity = 0.5f - lightFalloffLoss * lightCurve.Evaluate(1 - lightTimer / lightOnDuration);
+                aura.pointLightOuterRadius = 5.0f + lightRadiusGain * lightCurve.Evaluate(1 - lightTimer / lightOnDuration);
+            }
+        }
+        else
+        {
+            if (lightOn)
+            {
+                lightOn = false;
+                
+                standTimer = standDuration;
+
+                lightTimer = lightOffDuration;
+            }
+
+            if (!lightOn && lightTimer > 0.0f)
+            {
+                lightTimer = Mathf.Max(0.0f, lightTimer - Time.deltaTime);
+                aura.falloffIntensity = 0.5f - lightFalloffLoss * lightCurve.Evaluate(lightTimer / lightOffDuration);
+                aura.pointLightOuterRadius = 5.0f + lightRadiusGain * lightCurve.Evaluate(lightTimer / lightOffDuration);
+            }
         }
     }
 
