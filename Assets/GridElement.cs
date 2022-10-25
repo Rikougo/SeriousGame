@@ -17,11 +17,11 @@ public class GridElement : MonoBehaviour
     {
         if (col.CompareTag("Player"))
         {
-            // Vector3 newCamPos = transform.position;
-            // newCamPos.z = (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
-            // (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = newCamPos;
-            StopCoroutine ( MoveScreen() );
-            StartCoroutine ( MoveScreen() );
+            Vector3 newCamPos = transform.position;
+            newCamPos.z = (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
+            (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = newCamPos;
+            // StopCoroutine ( MoveScreen() );
+            // StartCoroutine ( MoveScreen() );
         }
     }
 
@@ -29,18 +29,22 @@ public class GridElement : MonoBehaviour
     IEnumerator MoveScreen() {
 
         Vector3 nextPos = transform.position;
+
         nextPos.z =  (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
+        (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = nextPos;
 
-        float smoothTime = 0.7F;
-        Vector3 velocity = Vector3.zero;
+        yield return null;
 
-        while((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position  != nextPos) {
-            nextPos = transform.position;
-            nextPos.z =  (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
-            (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = Vector3.SmoothDamp((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position, nextPos, ref velocity, smoothTime);
+        // float smoothTime = 0.7F;
+        // Vector3 velocity = Vector3.zero;
+
+        // while((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position  != nextPos) {
+        //     nextPos = transform.position;
+        //     nextPos.z =  (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
+        //     (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = Vector3.SmoothDamp((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position, nextPos, ref velocity, smoothTime);
             
-            yield return null;
-        }
+        //     yield return null;
+        // }
     }
     
 }

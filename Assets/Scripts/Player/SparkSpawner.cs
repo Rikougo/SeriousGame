@@ -29,6 +29,8 @@ public class SparkSpawner : MonoBehaviour
     void SpawnSparks()
     {
         List<PlatformMarker> markers = GameObject.FindObjectsOfType<PlatformMarker>().ToList();
+
+        if (markers.Count == 0) return;
         int closest_id = markers.OrderBy(pm => (pm.transform.position - transform.position).sqrMagnitude).First().Id;
         foreach(Transform t in markers.OrderBy(pm => pm.Id).Where(pm => Mathf.Abs(pm.Id - closest_id) <= 1).Select(pm => pm.transform))
         {
