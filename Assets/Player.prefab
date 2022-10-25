@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 7095220282230351898}
   - component: {fileID: 8522684381346946079}
   - component: {fileID: 8219391757019086689}
+  - component: {fileID: 5879919730636111100}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -365,3 +366,17 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5879919730636111100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1589024418682960883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 867e26ffe91ad42969cd099e6e7a4320, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sparkPrefab: {fileID: 5432665127424156867, guid: 1082b9399371dbb8fb7949ef4dd06e1d, type: 3}
+  sparkSpeed: 50
