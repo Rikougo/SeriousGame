@@ -20,7 +20,7 @@ public class GridElement : MonoBehaviour
             // Vector3 newCamPos = transform.position;
             // newCamPos.z = (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.z;
             // (mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position = newCamPos;
-            StartCoroutine ( MoveScreen() );
+            StopCoroutine ( MoveScreen() );
             StartCoroutine ( MoveScreen() );
         }
     }
