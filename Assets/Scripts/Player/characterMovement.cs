@@ -68,7 +68,7 @@ public class characterMovement : MonoBehaviour
         jump = GetComponent<characterJump>();
 
         isDashing = false;
-        lightOn = false;
+        lightOn = true;
     }
 
     public void OnDash(InputAction.CallbackContext context)

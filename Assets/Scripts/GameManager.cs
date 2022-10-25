@@ -7,45 +7,32 @@ using Cinemachine;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject character;
-
-    public TMP_Text timeText;
-    public int currentTime;
-    public int currentLevel;
-
-    IEnumerator TimerTick(){
-        while (currentTime > 0)
-        {
-            timeText.text = "Time : " + currentTime.ToString();
-            yield return new WaitForSeconds(1);
-            currentTime--;
-        }
-        SceneManager.LoadScene("Tmp_Thomas");
-    }
-
-    private CinemachineBrain mainCamera;
+    [Header("Level components")] 
+    [SerializeField] private TextMeshProUGUI m_timerText;
+    [Header("Level settings")] 
+    [SerializeField] private bool m_lightOff = true;
+    [SerializeField] private float m_levelDuration = 30.0f;
+    
+    private float m_levelTimer;
 
     private void Awake()
     {
-        mainCamera = GameObject.FindWithTag("MainCamera").GetComponent<CinemachineBrain>();
+        m_levelTimer = m_levelDuration;
     }
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        if(!timeText){
-            Debug.Log("ALLO");
-        }
-        StartCoroutine(TimerTick());
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        //Debug.Log((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.y);
-        if(character.transform.position.y < -10.0){
-            //Debug.Log((mainCamera.ActiveVirtualCamera as CinemachineVirtualCamera).transform.position.y);
-            SceneManager.LoadScene("Tmp_Thomas");
+        m_levelTimer -= Time.deltaTime;
+        m_timerText.text = $"{m_levelTimer:F2}";
+
+        if (m_levelTimer <= 0.0f)
+        {
+            ReloadScene();
         }
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

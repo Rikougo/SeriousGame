@@ -283,12 +283,7 @@ public class characterJump : MonoBehaviour
             }
 
             //Apply the new jumpSpeed to the velocity. It will be sent to the Rigidbody in FixedUpdate;
-            if(movement.direction.x == 1){
-                velocity.x -= jumpSpeed;
-            }
-            else{
-                velocity.x += jumpSpeed;
-            }
+            velocity.x -= Mathf.Sign(movement.direction.x) * jumpSpeed * 0.5f;
             velocity.y += jumpSpeed;
             currentlyJumping = true;
         }
