@@ -282,6 +282,7 @@ GameObject:
   - component: {fileID: 113222337}
   - component: {fileID: 113222336}
   - component: {fileID: 113222338}
+  - component: {fileID: 113222339}
   m_Layer: 0
   m_Name: VirtualCamera
   m_TagString: Untagged
@@ -358,6 +359,18 @@ MonoBehaviour:
   m_Offset: {x: 0, y: 5.5, z: 0}
   m_ApplyAfter: 1
   m_PreserveComposition: 0
+--- !u!114 &113222339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113222335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de849b2fcc0ba0e4fa7a1fb25e0db007, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &220989650
 GameObject:
   m_ObjectHideFlags: 0
@@ -9560,7 +9573,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 9
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -10864,7 +10877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1429455962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 128, y: 0, z: 0}
+  m_LocalPosition: {x: 128.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
